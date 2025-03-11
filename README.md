@@ -8,7 +8,7 @@ forge install uniswap/v3-periphery
 forge install openzepellin/openzeppelin-contracts
 ```
 
-### Run the following commands to update [ hevm ](https://hevm.dev/), the tool used for formal verification
+### Run the following commands to update [ hevm ](https://hevm.dev/), the tool used for symbolic testing
 
 ```shell
 wget https://github.com/ethereum/hevm/releases/download/release/0.54.2/hevm-x86_64-linux
