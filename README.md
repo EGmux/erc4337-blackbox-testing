@@ -1,6 +1,6 @@
 ## Setup
 
-### Run the following commands to update the depedencies 
+### Run the following commands to update the dependencies 
 
 ```shell
 forge install uniswap/v3-core
