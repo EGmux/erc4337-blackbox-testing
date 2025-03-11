@@ -19,6 +19,19 @@ contract EntrypointBoundary is Test{
 
 	}
 
+
+	// Proves that Entrypoint reverts on sender, if the address overflow.
+	function proveFail_SenderAddressOverflow(PartialUserOperation memory partialUserOp, address payable beneficiary) public {
+		require(partialUserOp.sender == address(type(uint160).max+1), "Invalid argument!");
+		
+		PackedUserOperation[] memory userOps = new PackedUserOperation[](1);
+
+		    userOps[0] = ut.convertPartialUserOperationToPackedUserOperation(partialUserOp, userOps[0]);(partialUserOp,userOps[0]);
+		
+    	    entryPoint.handleOps(userOps, beneficiary);
+	}
+
+	// Proves that Entrypoint reverts if sender address is zero
 	function proveFail_ZeroAddressSender(PartialUserOperation memory partialUserOp, address payable beneficiary) public {
 	    require(partialUserOp.sender == address(0), "Invalid arguments!");
             
@@ -28,4 +41,5 @@ contract EntrypointBoundary is Test{
 		
     	    entryPoint.handleOps(userOps, beneficiary);
   }
+
 }
