@@ -19,12 +19,12 @@ contract EntrypointBoundary is Test{
 
 	}
 
-	function proveFail_CallDataZeroAddressSender(PartialUserOperation memory partialUserOp, address payable beneficiary) public {
+	function proveFail_ZeroAddressSender(PartialUserOperation memory partialUserOp, address payable beneficiary) public {
 	    require(partialUserOp.sender == address(0), "Invalid arguments!");
             
 	    PackedUserOperation[] memory userOps = new PackedUserOperation[](1);
 
-	    userOps[0] = ut.convertPartialUserOperationToUserOperation(partialUserOp,userOps[0]);
+	    userOps[0] = ut.convertPartialUserOperationToPackedUserOperation(partialUserOp, userOps[0]);(partialUserOp,userOps[0]);
 		
     	    entryPoint.handleOps(userOps, beneficiary);
   }
