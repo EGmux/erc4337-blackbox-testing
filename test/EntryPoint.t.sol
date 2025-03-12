@@ -28,6 +28,17 @@ contract EntrypointBoundary is Test {
 
 	       PackedUserOperation[] memory userOps = new PackedUserOperation[](1);
 
+	       bytes memory ownerSig = abi.encodePacked(
+            version,
+            validUntil,
+            abi.encode( // signature
+                Utils.rawSignatureToSignature({
+                    challenge: challengeToSign,
+                    r: 0xafb3561771f09d5119b12350f9089874e21a193a37b40c3f872ff4a93730f727,
+                    s: 0x9f2756dc68bd36de31ed67b3f775bf604e86547867796e9679d4b4673aef81e9
+                })
+            )
+        );
 	       userOps[0] = ut.convertPartialUserOperationToPackedUserOperation(
 	           partialUserOp,
 	           userOps[0]
