@@ -4,7 +4,7 @@ import "../../src/interfaces/PackedUserOperation.sol";
 import "./PartialUserOperation.sol";
 import {Vm} from "forge-std/Vm.sol";
 
-contract Utils{
+contract testUtils{
 
 	constructor(){}
 
