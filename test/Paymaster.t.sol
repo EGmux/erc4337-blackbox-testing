@@ -81,3 +81,4 @@ contract PaymasterTest {
       try entryPoint.addStake{value: staked}(account) {} catch {assert(true);}
 
     }
+}
