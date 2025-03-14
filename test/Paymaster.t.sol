@@ -38,28 +38,6 @@ contract PaymasterTest {
 	}
 
 	
-    // /// @inheritdoc IStakeManager
-    // function addStake(uint32 unstakeDelaySec) external payable {
-    //     DepositInfo storage info = deposits[msg.sender];
-    //     require(unstakeDelaySec > 0, "must specify unstake delay");
-    //     require(
-    //         unstakeDelaySec >= info.unstakeDelaySec,
-    //         "cannot decrease unstake time"
-    //     );
-    //     uint256 stake = info.stake + msg.value;
-    //     require(stake > 0, "no stake specified");
-    //     require(stake <= type(uint112).max, "stake overflow");
-    //     deposits[msg.sender] = DepositInfo(
-    //         info.deposit,
-    //         true,
-    //         uint112(stake),
-    //         unstakeDelaySec,
-    //         0
-    //     );
-    //     emit StakeLocked(msg.sender, stake, unstakeDelaySec);
-    // }
-    //
-
     // prove stake can't be zero wei
     function proveFail_stakeCantBeZero(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked) public {
 		
@@ -72,5 +50,21 @@ contract PaymasterTest {
 		entryPoint.despositTo{value: deposit}(account);
 
 		entryPoint.addStake{value: staked}(delay);
+    }
+
+    // prove stake must be at minimum (dealt - deposit)
+    function prove_stakeMininumAmmount(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked){
+
+
+		require(account != address(type(uint160).max + 1) && account != address(0));
+		require(deposit <= dealt && staked == (dealt - deposit) && staked != 0);
+		
+		vm.deal(account, dealt wei);
+
+		entryPoint.depositTo{value: deposit}(account);
+
+		try entryPoint.addStake{value: staked}(account) {} catch {assert(false);}
+
+		assertEq(entryPoint.getDepositInfo(account).stake,staked);
     }
 }
