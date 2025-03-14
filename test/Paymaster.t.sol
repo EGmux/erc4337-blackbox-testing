@@ -38,33 +38,33 @@ contract PaymasterTest {
 	}
 
 	
-    // prove stake can't be zero wei
-    function proveFail_stakeCantBeZero(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked) public {
-		
-		// https://docs.soliditylang.org/en/latest/types.html#address
-		require(account != address(type(uint160).max + 1) && account != address(0));
-		require(deposit <= dealt && staked == uint112(0));
+	    // prove stake can't be zero wei
+	    function proveFail_stakeCantBeZero(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked) public {
+			
+			// https://docs.soliditylang.org/en/latest/types.html#address
+			require(account != address(type(uint160).max + 1) && account != address(0));
+			require(deposit <= dealt && staked == uint112(0));
 
-		vm.deal(account, dealt wei);
+			vm.deal(account, dealt wei);
 
-		entryPoint.despositTo{value: deposit}(account);
+			entryPoint.despositTo{value: deposit}(account);
 
-		entryPoint.addStake{value: staked}(delay);
-    }
+			entryPoint.addStake{value: staked}(delay);
+	    }
 
-    // prove stake must be at minimum (dealt - deposit)
-    function prove_stakeMininumAmmount(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked){
+	    // prove stake must be at minimum (dealt - deposit)
+	    function prove_stakeMininumAmmount(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked){
 
 
-		require(account != address(type(uint160).max + 1) && account != address(0));
-		require(deposit <= dealt && staked == (dealt - deposit) && staked != 0);
-		
-		vm.deal(account, dealt wei);
+			require(account != address(type(uint160).max + 1) && account != address(0));
+			require(deposit < dealt && staked == (dealt - deposit));
+			
+			vm.deal(account, dealt wei);
 
-		entryPoint.depositTo{value: deposit}(account);
+			entryPoint.depositTo{value: deposit}(account);
 
-		try entryPoint.addStake{value: staked}(account) {} catch {assert(false);}
+			try entryPoint.addStake{value: staked}(account) {} catch {assert(false);}
 
-		assertEq(entryPoint.getDepositInfo(account).stake,staked);
-    }
+			assertEq(entryPoint.getDepositInfo(account).stake,staked);
+	    }
 }
