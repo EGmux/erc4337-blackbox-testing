@@ -18,15 +18,14 @@ contract EntrypointBoundary is Test {
     }
 
     // Proves that nonce is zero, PackedUserOperation is valid and beneficiary not zero address 
-    function prove_ZeroNonceNeverRevertsIfPackedUserOperationIsValid(
-        PartialUserOperation memory partialUserOp,
-        address payable beneficiary
-    ) public {
+	   function prove_ZeroNonceNeverRevertsIfPackedUserOperationIsValid(
+	       PartialUserOperation memory partialUserOp,
+	       address payable beneficiary
+	   ) public {
 	// (partialUserOp.sender, key) = makeAddrAndKey("bob");
 	       vm.assume(partialUserOp.nonce == 0 && beneficiary != address(0) && partialUserOp.sender != address(0));
 
 	       PackedUserOperation[] memory userOps = new PackedUserOperation[](1);
-
 
 	       userOps[0] = ut.convertPartialUserOperationToPackedUserOperation(
 	           partialUserOp,
@@ -39,11 +38,11 @@ contract EntrypointBoundary is Test {
 	       userOps[0].signature = hex"00";
 
 	       entryPoint.handleOps(userOps, beneficiary);
-    }
+	   }
 
 
     // Proves that Entrypoint reverts if sender address overflows.
-    function proveFail_SenderAddressOverflow(
+    function prove_SenderAddressOverflow(
         PartialUserOperation memory partialUserOp,
         address payable beneficiary
     ) public {
