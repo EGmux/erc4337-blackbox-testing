@@ -18,7 +18,7 @@ contract PaymasterTest {
 		require(account == address(0));
 		require(deposit <= dealt);
 
-		vm.deal(account, dealt wei);
+		vm.deal(account, dealt);
 
 		entryPoint.depositTo{value: deposit}(account);
 
@@ -31,7 +31,7 @@ contract PaymasterTest {
 		require(account == address(type(uint160).max + 1));
 		require(deposit <= dealt);
 
-		vm.deal(account, dealt wei);
+		vm.deal(account, dealt);
 
 		entryPoint.depositTo{value: deposit}(account);
 
@@ -45,7 +45,7 @@ contract PaymasterTest {
 			require(account != address(type(uint160).max + 1) && account != address(0));
 			require(deposit <= dealt && staked == uint112(0));
 
-			vm.deal(account, dealt wei);
+			vm.deal(account, dealt );
 
 			entryPoint.despositTo{value: deposit}(account);
 
@@ -53,13 +53,13 @@ contract PaymasterTest {
 	    }
 
 	    // prove stake must be at maximum (dealt - deposit)
-	    function prove_stakeMaximumAmmount(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked){
+	    function prove_stakeMaximumAmmount(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked)public{
 
 
 			require(account != address(type(uint160).max + 1) && account != address(0));
 			require(deposit < dealt && staked == (dealt - deposit));
 			
-			vm.deal(account, dealt wei);
+			vm.deal(account, dealt );
 
 			entryPoint.depositTo{value: deposit}(account);
 
@@ -74,10 +74,11 @@ contract PaymasterTest {
 			require(account != address(type(uint160).max + 1) && account != address(0));
 			require(deposit < dealt && staked == type(uint112).max && staked <= (dealt - deposit));
 
-			vm.deal(account, dealt wei);
+			vm.deal(account, dealt );
 
 			entryPoint.depositTo{value: deposit}(account);
 
 			try entryPoint.addStake{value: staked}(account) {} catch {assert(true);}
 
 	    }
+
