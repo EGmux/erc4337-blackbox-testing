@@ -2,7 +2,6 @@
 pragma solidity ^0.8.23;
 import "../src/core/EntryPoint.sol";
 import {Test} from "forge-std/Test.sol";
-import {Vm} from "forge-std/Vm.sol";
 
 contract PaymasterTest {
 	
@@ -18,7 +17,7 @@ contract PaymasterTest {
 		require(account == address(0));
 		require(deposit <= dealt);
 
-		vm.deal(account, dealt);
+		deal(account, dealt);
 
 		entryPoint.depositTo{value: deposit}(account);
 
@@ -31,7 +30,7 @@ contract PaymasterTest {
 		require(account == address(type(uint160).max + 1));
 		require(deposit <= dealt);
 
-		vm.deal(account, dealt);
+		deal(account, dealt);
 
 		entryPoint.depositTo{value: deposit}(account);
 
@@ -44,7 +43,7 @@ contract PaymasterTest {
       require(account != address(type(uint160).max + 1) && account != address(0));
       require(deposit <= dealt && staked == uint112(0));
 
-      vm.deal(account, dealt );
+      deal(account, dealt );
 
       entryPoint.despositTo{value: deposit}(account);
 
@@ -58,7 +57,7 @@ contract PaymasterTest {
       require(account != address(type(uint160).max + 1) && account != address(0));
       require(deposit < dealt && staked == (dealt - deposit));
       
-      vm.deal(account, dealt );
+      deal(account, dealt );
 
       entryPoint.depositTo{value: deposit}(account);
 
@@ -74,7 +73,7 @@ contract PaymasterTest {
       require(account != address(type(uint160).max + 1) && account != address(0));
       require(deposit < dealt && staked == type(uint112).max && staked <= (dealt - deposit));
 
-      vm.deal(account, dealt );
+      deal(account, dealt );
 
       entryPoint.depositTo{value: deposit}(account);
 
