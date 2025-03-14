@@ -52,8 +52,8 @@ contract PaymasterTest {
 			entryPoint.addStake{value: staked}(delay);
 	    }
 
-	    // prove stake must be at minimum (dealt - deposit)
-	    function prove_stakeMininumAmmount(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked){
+	    // prove stake must be at maximum (dealt - deposit)
+	    function prove_stakeMaximumAmmount(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked){
 
 
 			require(account != address(type(uint160).max + 1) && account != address(0));
@@ -67,4 +67,17 @@ contract PaymasterTest {
 
 			assertEq(entryPoint.getDepositInfo(account).stake,staked);
 	    }
-}
+
+	    // prove stake can overflow
+	    function prove_stakeCanOverflow(address account, uint256 dealt, uint256 deposit, uint32 delay, uint112 staked)public {
+	
+			require(account != address(type(uint160).max + 1) && account != address(0));
+			require(deposit < dealt && staked == type(uint112).max && staked <= (dealt - deposit));
+
+			vm.deal(account, dealt wei);
+
+			entryPoint.depositTo{value: deposit}(account);
+
+			try entryPoint.addStake{value: staked}(account) {} catch {assert(true);}
+
+	    }
